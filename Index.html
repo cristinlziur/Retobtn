@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+    <head>
+        <title>Reto</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="Mihojadeestilo.css"/>
+    </head>
+    <body> 
+        <h1>¡Presiona, rápido!</h1>
+        <button class="btn-a" onclick="changeClass('letterA')">A</button> 
+        <button class="btn-b" onclick="changeClass('letterB')">B</button>
+        <button class="btn-x" onclick="changeClass('letterX')">X</button> 
+        <button class="btn-y" onclick="changeClass('letterY')">Y</button>
+
+        <div class="letters-container">
+                <p id="letterA">A</p>
+                <p id="letterB">B</p>
+                <p id="letterX">X</p>
+                <p id="letterY">Y</p>
+        </div>
+    </body>
+    <script language="javascript" type="text/javascript">
+        var wsUri = "ws://echo.websocket.org/";
+        function init()
+        {
+          initWebSocket();
+        }
+        function initWebSocket()
+        {
+          websocket = new WebSocket(wsUri);
+          websocket.onopen = function(evt) { onOpen(evt) };
+          websocket.onclose = function(evt) { onClose(evt) };
+          websocket.onmessage = function(evt) { onMessage(evt) };
+          websocket.onerror = function(evt) { onError(evt) };
+        }
+        function onOpen(evt)
+        {
+            console.log("CONNECTED");
+        }
+        function onClose(evt)
+        {
+            console.log("DISCONNECTED");
+        }
+        function onMessage(evt)
+        {
+            console.log('Rspuesta: ' + evt.data);
+            toggleClass(evt.data);
+            //websocket.close();
+        }
+        function onError(evt)
+        {
+            console.log('ERROR: ' + evt.data);
+        }
+        function doSend(message)
+        {
+            console.log("Se envía: " + message);
+            websocket.send(message);
+        }
+        
+        function changeClass(letter){
+            doSend(letter);
+        }
+        function toggleClass(letter){
+            document.getElementById(letter).classList.toggle('show');
+        }
+        window.addEventListener("load", init, false);
+    </script>
+</html>
